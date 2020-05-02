@@ -1,15 +1,34 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Color from "color";
+
+const REGISTER_MAX = 256;
+type RegisterValue = number;
 
 interface IEmulatorState {
-    ra: number;
-    rb: number;
-    rc: number;
+    ra: RegisterValue;
+    rb: RegisterValue;
+    rc: RegisterValue;
 }
 
 interface IAppProps {
     code: string[];
     emulatorState: IEmulatorState[];
+}
+
+function generatorRegisterColor(registerValue: RegisterValue): Color {
+    const COLOR_MAX = 100;
+
+    const MAX_LIGHTNESS_OFFSET = 20;
+    const LIGHTNESS_SCALE = 0.5;
+    const l = (registerValue === 0)
+        ? 100
+        : COLOR_MAX - MAX_LIGHTNESS_OFFSET - (registerValue / REGISTER_MAX * COLOR_MAX * LIGHTNESS_SCALE);
+
+    const SMALL_FACTOR = 20;
+    const h = (registerValue % SMALL_FACTOR) * (COLOR_MAX / SMALL_FACTOR);
+
+    return Color({ h: h, s: 50, l: l });
 }
 
 class App extends React.Component<IAppProps, {}> {
@@ -22,11 +41,12 @@ class App extends React.Component<IAppProps, {}> {
             ? ""
             : this.props.code[index];
         const emulator = this.props.emulatorState[index];
+        console.log(generatorRegisterColor(emulator.ra));
         return <tr>
             <td><code>{line}</code></td>
-            <td>{emulator.ra}</td>
-            <td>{emulator.rb}</td>
-            <td>{emulator.rc}</td>
+            <td style={{ backgroundColor: generatorRegisterColor(emulator.ra).hex() }}>{emulator.ra}</td>
+            <td style={{ backgroundColor: generatorRegisterColor(emulator.rb).hex() }}>{emulator.rb}</td>
+            <td style={{ backgroundColor: generatorRegisterColor(emulator.rc).hex() }}>{emulator.rc}</td>
         </tr>;
     }
 
