@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Color from "color";
+import { IEmulatorState, RegisterValue, REGISTER_MAX, EmulatorCommand } from "./emulator/EmulatorTypes";
+import Emulator from "./emulator/Emulator";
 
 function times<T>(n: number, func: (index: number) => T): T[] {
     const ret: T[] = [];
@@ -10,20 +12,12 @@ function times<T>(n: number, func: (index: number) => T): T[] {
     return ret;
 }
 
-const REGISTER_MAX = 256;
-type RegisterValue = number;
-
-interface IEmulatorState {
-    ra: RegisterValue;
-    rb: RegisterValue;
-    rc: RegisterValue;
-}
-
 interface IAppProps {
     code: string[];
     emulatorState: IEmulatorState[];
 }
 
+// This is a terrible hash function. Love, Ben.
 function generatorRegisterColor(registerValue: RegisterValue): Color {
     const COLOR_MAX = 100;
 
@@ -76,16 +70,30 @@ class App extends React.Component<IAppProps, {}> {
     }
 }
 
+const emulatorCommands: EmulatorCommand[] = [
+    "nop",
+    "nop",
+    "nop"
+];
+
+const DEFAULT_STATE: IEmulatorState = {
+    ra: 0,
+    rb: 0,
+    rc: 0
+};
+
+const emulatorStates: IEmulatorState[] = [
+    DEFAULT_STATE
+];
+for (let i = 0; i < emulatorCommands.length; i++) {
+    const command: EmulatorCommand = emulatorCommands[i];
+    const last_state = emulatorStates[emulatorStates.length - 1];
+    emulatorStates.push(Emulator.run(last_state, command));
+}
+
 const props: IAppProps = {
-    code: [
-        "set rb to 240",
-        "set rc to 12",
-    ],
-    emulatorState: [
-        { ra: 0, rb: 0, rc: 0 },
-        { ra: 0, rb: 240, rc: 0 },
-        { ra: 0, rb: 240, rc: 12 },
-    ]
+    code: emulatorCommands,
+    emulatorState: emulatorStates
 };
 
 const mountNode = document.getElementById("app");
