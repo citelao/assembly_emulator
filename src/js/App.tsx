@@ -2,6 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Color from "color";
 
+function times<T>(n: number, func: (index: number) => T): T[] {
+    const ret: T[] = [];
+    for (let i = 0; i < n; i++) {
+        ret.push(func(i));
+    }
+    return ret;
+}
+
 const REGISTER_MAX = 256;
 type RegisterValue = number;
 
@@ -50,6 +58,12 @@ class App extends React.Component<IAppProps, {}> {
         </tr>;
     }
 
+    private renderColors(): JSX.Element {
+        return <ul>
+            {times(REGISTER_MAX, (index) => <li style={{ backgroundColor: generatorRegisterColor(index).hex() }}>{index}</li>)}
+        </ul>;
+    }
+
     render() {
         return <main>
             <table>
@@ -57,6 +71,7 @@ class App extends React.Component<IAppProps, {}> {
                    {this.props.emulatorState.map((_, index) => this.renderRow(index))}
                 </tbody>
             </table>
+            {this.renderColors()}
         </main>;
     }
 }
