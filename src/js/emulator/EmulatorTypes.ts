@@ -16,3 +16,11 @@ export type EmulatorCommand =
         register: RegisterName,
         value: RegisterValue
     };
+
+export function stringify(command: EmulatorCommand): string {
+    if (command === "nop") {
+        return command;
+    } else if (command.command === "set") {
+        return `set ${command.register} to ${command.value}`;
+    }
+}

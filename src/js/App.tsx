@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Color from "color";
-import { IEmulatorState, RegisterValue, REGISTER_MAX, EmulatorCommand } from "./emulator/EmulatorTypes";
+import { IEmulatorState, RegisterValue, REGISTER_MAX, EmulatorCommand, stringify } from "./emulator/EmulatorTypes";
 import Emulator from "./emulator/Emulator";
 
 function times<T>(n: number, func: (index: number) => T): T[] {
@@ -41,7 +41,7 @@ class App extends React.Component<IAppProps, {}> {
     private renderRow(index: number): JSX.Element {
         const line = (this.props.code.length <= index)
             ? ""
-            : this.props.code[index].toString();
+            : stringify(this.props.code[index]);
         const emulator = this.props.emulatorState[index];
         console.log(generatorRegisterColor(emulator.ra));
         return <tr>
