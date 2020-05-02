@@ -15,6 +15,11 @@ export type EmulatorCommand =
         command: "set"
         register: RegisterName,
         value: RegisterValue
+    } |
+    {
+        command: "increment"
+        register: RegisterName,
+        by: RegisterValue
     };
 
 export function stringify(command: EmulatorCommand): string {
@@ -22,5 +27,7 @@ export function stringify(command: EmulatorCommand): string {
         return command;
     } else if (command.command === "set") {
         return `set ${command.register} to ${command.value}`;
+    } else if (command.command === "increment") {
+        return `increment ${command.register} by ${command.by}`;
     }
 }

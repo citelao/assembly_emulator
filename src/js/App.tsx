@@ -61,10 +61,19 @@ class App extends React.Component<IAppProps, {}> {
     render() {
         return <main>
             <table>
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>ra</th>
+                        <th>rb</th>
+                        <th>rc</th>
+                    </tr>
+                </thead>
                 <tbody>
                    {this.props.emulatorState.map((_, index) => this.renderRow(index))}
                 </tbody>
             </table>
+            <p>Ignore below</p>
             {this.renderColors()}
         </main>;
     }
@@ -77,6 +86,15 @@ const emulatorCommands: EmulatorCommand[] = [
     { command: "set", register: "ra", value: 150 },
     { command: "set", register: "rc", value: 2 },
     { command: "set", register: "rb", value: 30 },
+    { command: "set", register: "ra", value: 30 },
+    { command: "set", register: "rc", value: 80 },
+    { command: "increment", register: "rc", by: 1 },
+    { command: "increment", register: "rc", by: 1 },
+    { command: "increment", register: "rc", by: 1 },
+    { command: "increment", register: "rc", by: 1 },
+    { command: "increment", register: "rc", by: 1 },
+    { command: "increment", register: "rc", by: 1 },
+    { command: "increment", register: "rc", by: 1 },
     "nop",
 ];
 
