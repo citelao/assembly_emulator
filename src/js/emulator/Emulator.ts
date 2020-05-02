@@ -12,6 +12,10 @@ export default class Emulator {
             const partialState: Partial<IEmulatorState> = {};
             partialState[command.register] = oldState[command.register] + command.by;
             return Object.assign({}, oldState, partialState);
+        } else if (command.command === "add") {
+            const partialState: Partial<IEmulatorState> = {};
+            partialState[command.to] = oldState[command.a] + oldState[command.b];
+            return Object.assign({}, oldState, partialState);
         }
     }
 }

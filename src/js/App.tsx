@@ -92,6 +92,7 @@ const emulatorCommands: EmulatorCommand[] = [
     { command: "increment", register: "rc", by: 1 },
     { command: "increment", register: "rc", by: 1 },
     { command: "increment", register: "rc", by: 1 },
+    { command: "add", to: "rc", a: "rc", b: "ra" },
     { command: "increment", register: "rc", by: 1 },
     { command: "increment", register: "rc", by: 1 },
     { command: "increment", register: "rc", by: 1 },
