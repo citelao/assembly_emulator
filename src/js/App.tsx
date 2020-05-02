@@ -13,7 +13,7 @@ function times<T>(n: number, func: (index: number) => T): T[] {
 }
 
 interface IAppProps {
-    code: string[];
+    code: EmulatorCommand[];
     emulatorState: IEmulatorState[];
 }
 
@@ -41,7 +41,7 @@ class App extends React.Component<IAppProps, {}> {
     private renderRow(index: number): JSX.Element {
         const line = (this.props.code.length <= index)
             ? ""
-            : this.props.code[index];
+            : this.props.code[index].toString();
         const emulator = this.props.emulatorState[index];
         console.log(generatorRegisterColor(emulator.ra));
         return <tr>
@@ -73,7 +73,11 @@ class App extends React.Component<IAppProps, {}> {
 const emulatorCommands: EmulatorCommand[] = [
     "nop",
     "nop",
-    "nop"
+    { command: "set", register: "rb", value: 50 },
+    { command: "set", register: "ra", value: 150 },
+    { command: "set", register: "rc", value: 2 },
+    { command: "set", register: "rb", value: 30 },
+    "nop",
 ];
 
 const DEFAULT_STATE: IEmulatorState = {
