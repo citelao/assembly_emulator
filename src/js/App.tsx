@@ -1,11 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-class App extends React.Component {
+interface IAppProps {
+    code: string[];
+}
+
+class App extends React.Component<IAppProps, {}> {
+    constructor(props: IAppProps) {
+        super(props);
+    }
+
     render() {
-        return <div>foo</div>;
+        return <main>
+            <pre>
+                {this.props.code.map(line => <>{line + "\r\n"}</>)}
+            </pre>
+        </main>;
     }
 }
 
+const props: IAppProps = {
+    code: [
+        "foo",
+        "bar"
+    ]
+};
+
 const mountNode = document.getElementById("app");
-ReactDOM.render(<App />, mountNode);
+ReactDOM.render(<App code={props.code} />, mountNode);
