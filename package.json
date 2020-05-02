@@ -1,0 +1,11 @@
+{
+  "name": "assembly_emulator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.html",
+  "scripts": {
+    "watch": "parcel src/index.html"
+  },
+  "author": "",
+  "license": "ISC"
+}
