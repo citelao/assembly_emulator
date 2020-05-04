@@ -4,8 +4,8 @@ export default class Emulator {
     public static run(oldState: IEmulatorState, command: EmulatorCommand): IEmulatorState {
         if (command === "nop") {
             return oldState;
-        } 
-        
+        }
+
         switch(command.command) {
             case "set":
             {
