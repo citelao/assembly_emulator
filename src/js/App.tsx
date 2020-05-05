@@ -34,10 +34,7 @@ function generatorRegisterColor(registerValue: RegisterValue): Color {
     return Color({ h: h, s: 50, l: l });
 }
 
-function generateProgramCounterDeltaColor(currentPc: RegisterValue, previousPc: RegisterValue): Color {
-    const delta = currentPc - previousPc;
-    console.log(`${previousPc} => ${currentPc}`);
-
+function generateProgramCounterDeltaColor(delta: number): Color {
     const DEFAULT_LIGHTNESS = 100;
 
     const LIGHTNESS_MAX = 80;
@@ -80,9 +77,22 @@ class App extends React.Component<IAppProps, {}> {
             };
         };
 
+        const getProgramCounterStyle = (current: RegisterValue, previous?: RegisterValue): React.CSSProperties => {
+            const delta = (previous === undefined)
+                ? 0
+                : Math.abs(current - previous);
+            const backgroundColor = generateProgramCounterDeltaColor(delta);
+            return {
+                backgroundColor: backgroundColor.hex(),
+                color: (delta === 1)
+                    ? backgroundColor.darken(0.2).hex()
+                    : backgroundColor.darken(0.9).hex()
+            };
+        };
+
         console.log(generatorRegisterColor(emulator.ra));
         return <tr>
-            <td style={{ backgroundColor: generateProgramCounterDeltaColor(emulator.pc, previousState?.pc || emulator.pc ).hex() }}>{emulator.pc}</td>
+            <td style={getProgramCounterStyle(emulator.pc, previousState?.pc)}>{emulator.pc}</td>
             <td><code>{line}</code></td>
             <td style={getRegisterStyle(emulator.ra, previousState?.ra)}>{emulator.ra}</td>
             <td style={getRegisterStyle(emulator.rb, previousState?.rb)}>{emulator.rb}</td>
