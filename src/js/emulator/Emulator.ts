@@ -1,4 +1,5 @@
-import { IEmulatorState, EmulatorCommand } from "./EmulatorTypes";
+import { EmulatorCommand } from "./EmulatorTypes";
+import { IEmulatorState } from "./IEmulatorState";
 
 export default class Emulator {
     public static run(oldState: IEmulatorState, command: EmulatorCommand): IEmulatorState {

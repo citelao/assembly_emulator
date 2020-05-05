@@ -3,12 +3,6 @@ export type RegisterValue = number;
 export type Address = number;
 
 export type RegisterName = "ra" | "rb" | "rc";
-export interface IEmulatorState {
-    ra: RegisterValue;
-    rb: RegisterValue;
-    rc: RegisterValue;
-}
-
 export type EmulatorCommand =
     "nop" |
     {

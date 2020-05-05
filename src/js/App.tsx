@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Color from "color";
-import { IEmulatorState, RegisterValue, REGISTER_MAX, EmulatorCommand, stringify } from "./emulator/EmulatorTypes";
+import { RegisterValue, REGISTER_MAX, EmulatorCommand, stringify } from "./emulator/EmulatorTypes";
+import { IEmulatorState, stringifyEmulatorState } from "./emulator/IEmulatorState";
 import Emulator from "./emulator/Emulator";
 
 function times<T>(n: number, func: (index: number) => T): T[] {
@@ -49,6 +50,7 @@ class App extends React.Component<IAppProps, {}> {
             <td style={{ backgroundColor: generatorRegisterColor(emulator.ra).hex() }}>{emulator.ra}</td>
             <td style={{ backgroundColor: generatorRegisterColor(emulator.rb).hex() }}>{emulator.rb}</td>
             <td style={{ backgroundColor: generatorRegisterColor(emulator.rc).hex() }}>{emulator.rc}</td>
+            <td>{stringifyEmulatorState(emulator)}</td>
         </tr>;
     }
 
@@ -67,6 +69,7 @@ class App extends React.Component<IAppProps, {}> {
                         <th>ra</th>
                         <th>rb</th>
                         <th>rc</th>
+                        <th>State</th>
                     </tr>
                 </thead>
                 <tbody>
