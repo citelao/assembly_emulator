@@ -34,6 +34,22 @@ function generatorRegisterColor(registerValue: RegisterValue): Color {
     return Color({ h: h, s: 50, l: l });
 }
 
+function generateProgramCounterDeltaColor(currentPc: RegisterValue, previousPc: RegisterValue): Color {
+    const delta = currentPc - previousPc;
+
+    const DEFAULT_LIGHTNESS = 100;
+
+    const LIGHTNESS_MAX = 80;
+    const LIGHTNESS_MIN = 40;
+    const SCALE = 20;
+
+    const l = (delta != 1)
+        ? LIGHTNESS_MAX - Math.min(Math.abs(delta - 1) / SCALE, 1) * (LIGHTNESS_MAX - LIGHTNESS_MIN)
+        : DEFAULT_LIGHTNESS;
+
+    return Color({ h: 40, s: 50, l: l });
+}
+
 class App extends React.Component<IAppProps, {}> {
     constructor(props: IAppProps) {
         super(props);
@@ -44,8 +60,12 @@ class App extends React.Component<IAppProps, {}> {
             ? ""
             : stringify(this.props.code[index]);
         const emulator = this.props.emulatorState[index];
+        const previousState = (index > 0)
+            ? this.props.emulatorState[index]
+            : null;
         console.log(generatorRegisterColor(emulator.ra));
         return <tr>
+            <td style={{ backgroundColor: generateProgramCounterDeltaColor(emulator.pc, previousState?.pc || emulator.pc ).hex() }}>{emulator.pc}</td>
             <td><code>{line}</code></td>
             <td style={{ backgroundColor: generatorRegisterColor(emulator.ra).hex() }}>{emulator.ra}</td>
             <td style={{ backgroundColor: generatorRegisterColor(emulator.rb).hex() }}>{emulator.rb}</td>
@@ -65,6 +85,7 @@ class App extends React.Component<IAppProps, {}> {
             <table>
                 <thead>
                     <tr>
+                        <th>PC</th>
                         <th>Command</th>
                         <th>ra</th>
                         <th>rb</th>
@@ -103,9 +124,10 @@ const emulatorCommands: EmulatorCommand[] = [
 ];
 
 const DEFAULT_STATE: IEmulatorState = {
+    pc: 0,
     ra: 0,
     rb: 0,
-    rc: 0
+    rc: 0,
 };
 
 const emulatorStates: IEmulatorState[] = [

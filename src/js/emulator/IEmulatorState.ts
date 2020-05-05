@@ -1,5 +1,6 @@
-import { RegisterValue } from "./EmulatorTypes";
+import { RegisterValue, RegisterName } from "./EmulatorTypes";
 export interface IEmulatorState {
+    pc: RegisterValue;
     ra: RegisterValue;
     rb: RegisterValue;
     rc: RegisterValue;
