@@ -66,13 +66,27 @@ class App extends React.Component<IAppProps, {}> {
         const line = (this.props.code.length <= line_address)
             ? ""
             : stringify(this.props.code[line_address]);
+        
+        const getRegisterStyle = (current: RegisterValue, previous?: RegisterValue): React.CSSProperties => {
+            const delta = (previous === undefined)
+                ? 0
+                : Math.abs(current - previous);
+            const backgroundColor = generatorRegisterColor(current);
+            return {
+                backgroundColor: backgroundColor.hex(),
+                color: (delta === 0)
+                    ? backgroundColor.darken(0.2).hex()
+                    : backgroundColor.darken(0.9).hex()
+            };
+        };
+
         console.log(generatorRegisterColor(emulator.ra));
         return <tr>
             <td style={{ backgroundColor: generateProgramCounterDeltaColor(emulator.pc, previousState?.pc || emulator.pc ).hex() }}>{emulator.pc}</td>
             <td><code>{line}</code></td>
-            <td style={{ backgroundColor: generatorRegisterColor(emulator.ra).hex() }}>{emulator.ra}</td>
-            <td style={{ backgroundColor: generatorRegisterColor(emulator.rb).hex() }}>{emulator.rb}</td>
-            <td style={{ backgroundColor: generatorRegisterColor(emulator.rc).hex() }}>{emulator.rc}</td>
+            <td style={getRegisterStyle(emulator.ra, previousState?.ra)}>{emulator.ra}</td>
+            <td style={getRegisterStyle(emulator.rb, previousState?.rb)}>{emulator.rb}</td>
+            <td style={getRegisterStyle(emulator.rc, previousState?.rc)}>{emulator.rc}</td>
             <td>{stringifyEmulatorState(emulator)}</td>
         </tr>;
     }
