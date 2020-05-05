@@ -57,13 +57,15 @@ class App extends React.Component<IAppProps, {}> {
     }
 
     private renderRow(index: number): JSX.Element {
-        const line = (this.props.code.length <= index)
-            ? ""
-            : stringify(this.props.code[index]);
         const emulator = this.props.emulatorState[index];
         const previousState = (index > 0)
             ? this.props.emulatorState[index - 1]
             : null;
+        
+        const line_address = emulator.pc;
+        const line = (this.props.code.length <= line_address)
+            ? ""
+            : stringify(this.props.code[line_address]);
         console.log(generatorRegisterColor(emulator.ra));
         return <tr>
             <td style={{ backgroundColor: generateProgramCounterDeltaColor(emulator.pc, previousState?.pc || emulator.pc ).hex() }}>{emulator.pc}</td>
@@ -135,9 +137,15 @@ const DEFAULT_STATE: IEmulatorState = {
 const emulatorStates: IEmulatorState[] = [
     DEFAULT_STATE
 ];
-for (let i = 0; i < emulatorCommands.length; i++) {
-    const command: EmulatorCommand = emulatorCommands[i];
+const MAX_RUNS = 100;
+for (let i = 0; i < MAX_RUNS; i++) {
     const last_state = emulatorStates[emulatorStates.length - 1];
+
+    const command_address = last_state.pc;
+    if (emulatorCommands.length < command_address) {
+        break;
+    }
+    const command: EmulatorCommand = emulatorCommands[command_address];
     emulatorStates.push(Emulator.run(last_state, command));
 }
 
