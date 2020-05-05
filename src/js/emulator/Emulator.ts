@@ -4,7 +4,9 @@ import { IEmulatorState } from "./IEmulatorState";
 export default class Emulator {
     public static run(oldState: IEmulatorState, command: EmulatorCommand): IEmulatorState {
         if (command === "nop") {
-            return oldState;
+            const partialState: Partial<IEmulatorState> = {};
+            partialState.pc = oldState.pc + 1;
+            return Object.assign({}, oldState, partialState);
         }
 
         switch(command.command) {

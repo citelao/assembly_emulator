@@ -36,6 +36,7 @@ function generatorRegisterColor(registerValue: RegisterValue): Color {
 
 function generateProgramCounterDeltaColor(currentPc: RegisterValue, previousPc: RegisterValue): Color {
     const delta = currentPc - previousPc;
+    console.log(`${previousPc} => ${currentPc}`);
 
     const DEFAULT_LIGHTNESS = 100;
 
@@ -61,7 +62,7 @@ class App extends React.Component<IAppProps, {}> {
             : stringify(this.props.code[index]);
         const emulator = this.props.emulatorState[index];
         const previousState = (index > 0)
-            ? this.props.emulatorState[index]
+            ? this.props.emulatorState[index - 1]
             : null;
         console.log(generatorRegisterColor(emulator.ra));
         return <tr>
