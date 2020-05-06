@@ -102,25 +102,9 @@ class App extends React.Component<IAppProps, IAppState> {
                     }
                 </ul>
             </aside>
-            <table>
-                <thead>
-                    <tr>
-                        <th>PC</th>
-                        <th>Command</th>
-                        <th>ra</th>
-                        <th>rb</th>
-                        <th>rc</th>
-                        <th>State</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        (this.state.currentView === AppViewType.ExecutionView)
-                            ? this.renderExecutionView()
-                            : this.renderCodeView()
-                    }
-                </tbody>
-            </table>
+            {(this.state.currentView === AppViewType.ExecutionView)
+                ? this.renderExecutionView()
+                : this.renderCodeView()}
             <p>Ignore below</p>
             {this.renderColors()}
         </main>;
@@ -136,9 +120,21 @@ class App extends React.Component<IAppProps, IAppState> {
     }
 
     private renderExecutionView(): JSX.Element {
-        return <>
-            {this.props.emulatorState.map((_, index) => this.renderExecutionViewRow(index))}
-        </>;
+        return <table>
+            <thead>
+                <tr>
+                    <th>PC</th>
+                    <th>Command</th>
+                    <th>ra</th>
+                    <th>rb</th>
+                    <th>rc</th>
+                    <th>State</th>
+                </tr>
+            </thead>
+            <tbody>
+                {this.props.emulatorState.map((_, index) => this.renderExecutionViewRow(index))}
+            </tbody>
+        </table>;
     }
 
     private renderExecutionViewRow(index: number): JSX.Element {
@@ -177,26 +173,60 @@ class App extends React.Component<IAppProps, IAppState> {
     }
 
     private renderCodeView(): JSX.Element {
-        return <>
-            {this.props.code.map((code, index) => {
-                const relevantLines = this.props.emulatorState.filter((s) => s.pc === index);
+        return <table>
+            <thead>
+                <tr>
+                    <th>{""}</th>
+                    <th>PC</th>
+                    <th>Command</th>
+                    <th>ra</th>
+                    <th>rb</th>
+                    <th>rc</th>
+                </tr>
+            </thead>
+            <tbody>
+                {this.props.code.map((code, index) => {
+                    const relevantLines = this.props.emulatorState.filter((s) => s.pc === index);
 
-                const isUnreached = (relevantLines.length === 0);
-                const UNREACHABLE_STYLE: React.CSSProperties = {
-                    color: "#ddd",
-                    textDecoration: "line-through"
-                };
+                    const isUnreached = (relevantLines.length === 0);
+                    const UNREACHABLE_STYLE: React.CSSProperties = {
+                        color: "#ddd",
+                        textDecoration: "line-through"
+                    };
 
-                return <tr key={index} style={(isUnreached) ? UNREACHABLE_STYLE : null}>
-                    <td style={getProgramCounterStyle(index, index - 1)}>{index}</td>
-                    <td><code>{stringify(code)}</code></td>
-                    <td>{relevantLines.length}</td>
-                    <td>baz</td>
-                    <td>f</td>
-                    <td></td>
-                </tr>;
-            })}
-        </>
+                    // Visualize loops!
+                    const firstLineIndex = this.props.emulatorState.findIndex((s) => s.pc === index);
+                    let continuationChar = "";
+                    if (firstLineIndex !== -1 && firstLineIndex > 0) {
+                        if (relevantLines.length > 1) {
+                            const previousLine = this.props.emulatorState[firstLineIndex - 1];
+                            const nextLine = (firstLineIndex + 1 < this.props.emulatorState.length)
+                                ? this.props.emulatorState[firstLineIndex + 1]
+                                : null;
+    
+                            // TODO: handle if any previous lines come from elsewhere.
+                            // TODO: handle if any next lines go elsewhere.
+                            const isContinuedFromPrevious = previousLine.pc === index - 1;
+                            const isContinuedToNext = nextLine && nextLine.pc === index + 1;
+                            if (isContinuedFromPrevious && isContinuedToNext) {
+                                continuationChar = "┃";
+                            } else if(isContinuedFromPrevious) {
+                                continuationChar = "┗";
+                            }
+                        }
+                    }
+
+                    return <tr key={index} style={(isUnreached) ? UNREACHABLE_STYLE : undefined}>
+                        <td>{continuationChar}</td>
+                        <td style={getProgramCounterStyle(index, index - 1)}>{index}</td>
+                        <td><code>{stringify(code)}</code></td>
+                        <td>{relevantLines.length}</td>
+                        <td>baz</td>
+                        <td>f</td>
+                    </tr>;
+                })}
+            </tbody>
+        </table>;
     }
 
     private renderColors(): JSX.Element {
