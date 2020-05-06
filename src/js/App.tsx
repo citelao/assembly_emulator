@@ -81,7 +81,7 @@ class App extends React.Component<IAppProps, IAppState> {
                                     name="view"
                                     value={r.value}
                                     checked={r.compareValue === this.state.currentView}
-                                    onChange={this.handleChange} />
+                                    onChange={this.handleViewChange} />
                                 {r.text}
                             </label>
                         </li>)
@@ -103,7 +103,7 @@ class App extends React.Component<IAppProps, IAppState> {
                     {
                         (this.state.currentView === AppViewType.ExecutionView)
                             ? this.renderExecutionView()
-                            : <p>Hello</p>
+                            : this.renderCodeView()
                     }
                 </tbody>
             </table>
@@ -112,7 +112,7 @@ class App extends React.Component<IAppProps, IAppState> {
         </main>;
     }
 
-    private handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    private handleViewChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log(`Setting view to '${e.target.value}'`);
         this.setState({
             currentView: (e.target.value == "code")
@@ -123,11 +123,11 @@ class App extends React.Component<IAppProps, IAppState> {
 
     private renderExecutionView(): JSX.Element {
         return <>
-            {this.props.emulatorState.map((_, index) => this.renderRow(index))}
+            {this.props.emulatorState.map((_, index) => this.renderExecutionViewRow(index))}
         </>;
     }
 
-    private renderRow(index: number): JSX.Element {
+    private renderExecutionViewRow(index: number): JSX.Element {
         const emulator = this.props.emulatorState[index];
         const previousState = (index > 0)
             ? this.props.emulatorState[index - 1]
@@ -173,6 +173,22 @@ class App extends React.Component<IAppProps, IAppState> {
             <td style={getRegisterStyle(emulator.rc, previousState?.rc)}>{emulator.rc}</td>
             <td>{stringifyEmulatorState(emulator)}</td>
         </tr>;
+    }
+
+    private renderCodeView(): JSX.Element {
+        return <>
+            {/* {this.props.emulatorState.map((_, index) => this.renderExecutionViewRow(index))} */}
+            {this.props.code.map((code, index) => {
+                return <tr key={index}>
+                    <td>{index}</td>
+                    <td><code>{stringify(code)}</code></td>
+                    <td>bar</td>
+                    <td>baz</td>
+                    <td>f</td>
+                    <td>f</td>
+                </tr>;
+            })}
+        </>
     }
 
     private renderColors(): JSX.Element {
