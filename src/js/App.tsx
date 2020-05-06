@@ -179,9 +179,9 @@ class App extends React.Component<IAppProps, IAppState> {
                     <th>{""}</th>
                     <th>PC</th>
                     <th>Command</th>
-                    <th>ra</th>
-                    <th>rb</th>
-                    <th>rc</th>
+                    <th>Calls</th>
+                    {/* <th>rb</th>
+                    <th>rc</th> */}
                 </tr>
             </thead>
             <tbody>
@@ -222,8 +222,8 @@ class App extends React.Component<IAppProps, IAppState> {
                         <td style={getProgramCounterStyle(index, index - 1)}>{index}</td>
                         <td><code>{stringify(code)}</code></td>
                         <td>{relevantLines.length}</td>
-                        <td>baz</td>
-                        <td>f</td>
+                        {/* <td>baz</td>
+                        <td>f</td> */}
                     </tr>;
                 })}
             </tbody>
