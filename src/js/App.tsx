@@ -206,11 +206,12 @@ class App extends React.Component<IAppProps, IAppState> {
     
                             // TODO: handle if any previous lines come from elsewhere.
                             // TODO: handle if any next lines go elsewhere.
+                            // TODO: handle first item in loop
                             const isContinuedFromPrevious = previousLine.pc === index - 1;
                             const isContinuedToNext = nextLine && nextLine.pc === index + 1;
-                            if (isContinuedFromPrevious && isContinuedToNext) {
+                            if (isContinuedToNext) {
                                 continuationChar = "┃";
-                            } else if(isContinuedFromPrevious) {
+                            } else if (isContinuedFromPrevious) {
                                 continuationChar = "┗";
                             }
                         }
