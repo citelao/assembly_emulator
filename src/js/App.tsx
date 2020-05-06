@@ -43,6 +43,19 @@ function generateProgramCounterDeltaColor(delta: number): Color {
     return Color({ h: 40, s: 50, l: l });
 }
 
+function getProgramCounterStyle(current: RegisterValue, previous?: RegisterValue): React.CSSProperties {
+    const delta = (previous === undefined)
+        ? 0
+        : Math.abs(current - previous);
+    const backgroundColor = generateProgramCounterDeltaColor(delta);
+    return {
+        backgroundColor: backgroundColor.hex(),
+        color: (delta === 1)
+            ? backgroundColor.darken(0.2).hex()
+            : backgroundColor.darken(0.9).hex()
+    };
+};
+
 interface IAppProps {
     code: EmulatorCommand[];
     emulatorState: IEmulatorState[];
@@ -151,19 +164,6 @@ class App extends React.Component<IAppProps, IAppState> {
             };
         };
 
-        const getProgramCounterStyle = (current: RegisterValue, previous?: RegisterValue): React.CSSProperties => {
-            const delta = (previous === undefined)
-                ? 0
-                : Math.abs(current - previous);
-            const backgroundColor = generateProgramCounterDeltaColor(delta);
-            return {
-                backgroundColor: backgroundColor.hex(),
-                color: (delta === 1)
-                    ? backgroundColor.darken(0.2).hex()
-                    : backgroundColor.darken(0.9).hex()
-            };
-        };
-
         // console.log(generatorRegisterColor(emulator.ra));
         return <tr>
             <td style={getProgramCounterStyle(emulator.pc, previousState?.pc)}>{emulator.pc}</td>
@@ -180,7 +180,7 @@ class App extends React.Component<IAppProps, IAppState> {
             {/* {this.props.emulatorState.map((_, index) => this.renderExecutionViewRow(index))} */}
             {this.props.code.map((code, index) => {
                 return <tr key={index}>
-                    <td>{index}</td>
+                    <td style={getProgramCounterStyle(index, index - 1)}>{index}</td>
                     <td><code>{stringify(code)}</code></td>
                     <td>bar</td>
                     <td>baz</td>
