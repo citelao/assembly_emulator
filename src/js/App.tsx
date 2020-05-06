@@ -75,7 +75,8 @@ class App extends React.Component<IAppProps, IAppState> {
         super(props);
 
         this.state = {
-            currentView: AppViewType.ExecutionView
+            currentView: AppViewType.CodeView
+            // currentView: AppViewType.ExecutionView
         }
     }
 
@@ -177,15 +178,22 @@ class App extends React.Component<IAppProps, IAppState> {
 
     private renderCodeView(): JSX.Element {
         return <>
-            {/* {this.props.emulatorState.map((_, index) => this.renderExecutionViewRow(index))} */}
             {this.props.code.map((code, index) => {
-                return <tr key={index}>
+                const relevantLines = this.props.emulatorState.filter((s) => s.pc === index);
+
+                const isUnreached = (relevantLines.length === 0);
+                const UNREACHABLE_STYLE: React.CSSProperties = {
+                    color: "#ddd",
+                    textDecoration: "line-through"
+                };
+
+                return <tr key={index} style={(isUnreached) ? UNREACHABLE_STYLE : null}>
                     <td style={getProgramCounterStyle(index, index - 1)}>{index}</td>
                     <td><code>{stringify(code)}</code></td>
-                    <td>bar</td>
+                    <td>{relevantLines.length}</td>
                     <td>baz</td>
                     <td>f</td>
-                    <td>f</td>
+                    <td></td>
                 </tr>;
             })}
         </>
