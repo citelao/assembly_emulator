@@ -13,11 +13,6 @@ function times<T>(n: number, func: (index: number) => T): T[] {
     return ret;
 }
 
-interface IAppProps {
-    code: EmulatorCommand[];
-    emulatorState: IEmulatorState[];
-}
-
 // This is a terrible hash function. Love, Ben.
 function generatorRegisterColor(registerValue: RegisterValue): Color {
     const COLOR_MAX = 100;
@@ -48,9 +43,88 @@ function generateProgramCounterDeltaColor(delta: number): Color {
     return Color({ h: 40, s: 50, l: l });
 }
 
-class App extends React.Component<IAppProps, {}> {
+interface IAppProps {
+    code: EmulatorCommand[];
+    emulatorState: IEmulatorState[];
+}
+
+enum AppViewType {
+    CodeView,
+    ExecutionView
+}
+
+interface IAppState {
+    currentView: AppViewType
+}
+
+class App extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
         super(props);
+
+        this.state = {
+            currentView: AppViewType.ExecutionView
+        }
+    }
+
+    render() {
+        return <main>
+            <aside>
+                <ul>
+                    {
+                        [
+                            { value: "code", text: "Code view", compareValue: AppViewType.CodeView },
+                            { value: "execute", text: "Execution view", compareValue: AppViewType.ExecutionView },
+                        ].map((r) => <li>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="view"
+                                    value={r.value}
+                                    checked={r.compareValue === this.state.currentView}
+                                    onChange={this.handleChange} />
+                                {r.text}
+                            </label>
+                        </li>)
+                    }
+                </ul>
+            </aside>
+            <table>
+                <thead>
+                    <tr>
+                        <th>PC</th>
+                        <th>Command</th>
+                        <th>ra</th>
+                        <th>rb</th>
+                        <th>rc</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        (this.state.currentView === AppViewType.ExecutionView)
+                            ? this.renderExecutionView()
+                            : <p>Hello</p>
+                    }
+                </tbody>
+            </table>
+            <p>Ignore below</p>
+            {this.renderColors()}
+        </main>;
+    }
+
+    private handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(`Setting view to '${e.target.value}'`);
+        this.setState({
+            currentView: (e.target.value == "code")
+                ? AppViewType.CodeView
+                : AppViewType.ExecutionView
+        });
+    }
+
+    private renderExecutionView(): JSX.Element {
+        return <>
+            {this.props.emulatorState.map((_, index) => this.renderRow(index))}
+        </>;
     }
 
     private renderRow(index: number): JSX.Element {
@@ -58,12 +132,12 @@ class App extends React.Component<IAppProps, {}> {
         const previousState = (index > 0)
             ? this.props.emulatorState[index - 1]
             : null;
-        
+
         const line_address = emulator.pc;
         const line = (this.props.code.length <= line_address)
             ? ""
             : stringify(this.props.code[line_address]);
-        
+
         const getRegisterStyle = (current: RegisterValue, previous?: RegisterValue): React.CSSProperties => {
             const delta = (previous === undefined)
                 ? 0
@@ -90,7 +164,7 @@ class App extends React.Component<IAppProps, {}> {
             };
         };
 
-        console.log(generatorRegisterColor(emulator.ra));
+        // console.log(generatorRegisterColor(emulator.ra));
         return <tr>
             <td style={getProgramCounterStyle(emulator.pc, previousState?.pc)}>{emulator.pc}</td>
             <td><code>{line}</code></td>
@@ -105,28 +179,6 @@ class App extends React.Component<IAppProps, {}> {
         return <ul>
             {times(REGISTER_MAX, (index) => <li style={{ backgroundColor: generatorRegisterColor(index).hex() }}>{index}</li>)}
         </ul>;
-    }
-
-    render() {
-        return <main>
-            <table>
-                <thead>
-                    <tr>
-                        <th>PC</th>
-                        <th>Command</th>
-                        <th>ra</th>
-                        <th>rb</th>
-                        <th>rc</th>
-                        <th>State</th>
-                    </tr>
-                </thead>
-                <tbody>
-                   {this.props.emulatorState.map((_, index) => this.renderRow(index))}
-                </tbody>
-            </table>
-            <p>Ignore below</p>
-            {this.renderColors()}
-        </main>;
     }
 }
 
