@@ -19,6 +19,7 @@ export default class Emulator {
             }
             case "increment":
             {
+                // TODO handle overflow?
                 const partialState: Partial<IEmulatorState> = {};
                 partialState.pc = oldState.pc + 1;
                 partialState[command.register] = oldState[command.register] + command.by;
@@ -35,6 +36,16 @@ export default class Emulator {
             {
                 const partialState: Partial<IEmulatorState> = {};
                 partialState.pc = command.to;
+                return Object.assign({}, oldState, partialState);
+            }
+            case "jeq":
+            {
+                const partialState: Partial<IEmulatorState> = {};
+                if(oldState[command.a] === oldState[command.b]) {
+                    partialState.pc = command.to;
+                } else {
+                    partialState.pc = oldState.pc + 1;
+                }
                 return Object.assign({}, oldState, partialState);
             }
         }

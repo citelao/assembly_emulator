@@ -24,6 +24,12 @@ export type EmulatorCommand =
     {
         command: "jump",
         to: Address
+    } |
+    {
+        command: "jeq"
+        to: Address,
+        a: RegisterName,
+        b: RegisterName
     };
 
 export function stringify(command: EmulatorCommand): string {
@@ -40,5 +46,7 @@ export function stringify(command: EmulatorCommand): string {
             return `${command.to} = ${command.a} + ${command.b}`;
         case "jump":
             return `jump to ${command.to}`;
+        case "jeq":
+            return `jump to ${command.to} if ${command.a} == ${command.b}`;
     }
 }

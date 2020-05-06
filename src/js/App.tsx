@@ -237,24 +237,39 @@ class App extends React.Component<IAppProps, IAppState> {
     }
 }
 
+// Infinite loop
+// const emulatorCommands: EmulatorCommand[] = [
+//     "nop",
+//     "nop",
+//     { command: "set", register: "rb", value: 50 },
+//     { command: "set", register: "ra", value: 150 },
+//     { command: "set", register: "rc", value: 2 },
+//     { command: "set", register: "rb", value: 30 },
+//     { command: "set", register: "ra", value: 30 },
+//     { command: "set", register: "rc", value: 80 },
+//     { command: "increment", register: "rc", by: 1 },
+//     { command: "increment", register: "rc", by: 1 },
+//     { command: "increment", register: "rc", by: 1 },
+//     { command: "increment", register: "rc", by: 1 },
+//     { command: "add", to: "rc", a: "rc", b: "ra" },
+//     { command: "increment", register: "rc", by: 1 },
+//     { command: "increment", register: "rc", by: 1 },
+//     { command: "increment", register: "rc", by: 1 },
+//     { command: "jump", to: 9 },
+//     "nop",
+// ];
+
+// Terminating loop
 const emulatorCommands: EmulatorCommand[] = [
+    { command: "set", register: "ra", value: 3},
+    { command: "set", register: "rc", value: 0},
     "nop",
     "nop",
-    { command: "set", register: "rb", value: 50 },
-    { command: "set", register: "ra", value: 150 },
-    { command: "set", register: "rc", value: 2 },
-    { command: "set", register: "rb", value: 30 },
-    { command: "set", register: "ra", value: 30 },
-    { command: "set", register: "rc", value: 80 },
+    "nop",
+    "nop",
     { command: "increment", register: "rc", by: 1 },
-    { command: "increment", register: "rc", by: 1 },
-    { command: "increment", register: "rc", by: 1 },
-    { command: "increment", register: "rc", by: 1 },
-    { command: "add", to: "rc", a: "rc", b: "ra" },
-    { command: "increment", register: "rc", by: 1 },
-    { command: "increment", register: "rc", by: 1 },
-    { command: "increment", register: "rc", by: 1 },
-    { command: "jump", to: 9 },
+    { command: "jeq", to: 9, a: "rc", b: "ra" },
+    { command: "jump", to: 3},
     "nop",
 ];
 
@@ -273,7 +288,7 @@ for (let i = 0; i < MAX_RUNS; i++) {
     const last_state = emulatorStates[emulatorStates.length - 1];
 
     const command_address = last_state.pc;
-    if (emulatorCommands.length < command_address) {
+    if (emulatorCommands.length <= command_address) {
         break;
     }
     const command: EmulatorCommand = emulatorCommands[command_address];
