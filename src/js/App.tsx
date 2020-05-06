@@ -75,8 +75,8 @@ class App extends React.Component<IAppProps, IAppState> {
         super(props);
 
         this.state = {
-            currentView: AppViewType.CodeView
-            // currentView: AppViewType.ExecutionView
+            // currentView: AppViewType.CodeView
+            currentView: AppViewType.ExecutionView
         }
     }
 
