@@ -99,6 +99,13 @@ class App extends React.Component<IAppProps, IAppState> {
                 ? this.renderExecutionView()
                 : this.renderCodeView()}
             <aside className="sidebar">
+                <RadioButtonList
+                        name="numbers"
+                        items={[
+                            { value: "dec", text: "Decimal" },
+                            { value: "hex", text: "Hexidecimal" },
+                            { value: "binary", text: "Binary" }
+                        ]} />
                 {/* TODO! */}
                 <table>
                     <caption>Memory</caption>
