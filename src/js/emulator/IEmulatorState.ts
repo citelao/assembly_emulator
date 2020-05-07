@@ -8,5 +8,6 @@ export interface IEmulatorState {
 }
 
 export function stringifyEmulatorState(s: IEmulatorState): string {
-    return `r: (${s.ra}, ${s.rb}, ${s.rc}); mem: [${s.memory}]`;
+    // return `r: (${s.ra}, ${s.rb}, ${s.rc}); mem: [${s.memory}]`;
+    return "unneeded";
 }

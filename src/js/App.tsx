@@ -57,8 +57,8 @@ function getProgramCounterStyle(current: RegisterValue, previous?: RegisterValue
     };
 };
 
-const GRAPHICS_HEIGHT = 4;
-const GRAPHICS_WIDTH = 4;
+const GRAPHICS_HEIGHT = 16;
+const GRAPHICS_WIDTH = 16;
 
 interface IAppProps {
     code: EmulatorCommand[];
@@ -321,17 +321,96 @@ class App extends React.Component<IAppProps, IAppState> {
 // ];
 
 // Assignment
+// const emulatorCommands: EmulatorCommand[] = [
+//     "nop",
+//     "nop",
+//     "nop",
+//     "nop",
+//     "nop",
+//     { command: "set", register: "ra", value: 3},
+//     { command: "set", register: "rb", value: 30},
+//     { command: "store", from: "rb", to: 1 },
+//     { command: "store", from: "ra", to: 0 },
+//     { command: "load", from: 0, to: "rc" },
+// ];
+
+// Draw something
 const emulatorCommands: EmulatorCommand[] = [
     "nop",
     "nop",
     "nop",
     "nop",
     "nop",
-    { command: "set", register: "ra", value: 3},
-    { command: "set", register: "rb", value: 30},
-    { command: "store", from: "rb", to: 1 },
-    { command: "store", from: "ra", to: 0 },
-    { command: "load", from: 0, to: "rc" },
+    { command: "set", register: "ra", value: 1},
+    ...times((GRAPHICS_WIDTH / 2) - 4, (i): EmulatorCommand => {
+        const row_offset = 3;
+        const skip = 2;
+        // const width = 5;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times((GRAPHICS_WIDTH / 2) - 4, (i): EmulatorCommand => {
+        const row_offset = 3;
+        const skip = (GRAPHICS_WIDTH / 2) + 2;
+        // const width = 5;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times((GRAPHICS_WIDTH / 2) - 2, (i): EmulatorCommand => {
+        const row_offset = 4;
+        const skip = 1;
+        // const width = 5;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times((GRAPHICS_WIDTH / 2) - 2, (i): EmulatorCommand => {
+        const row_offset = 4;
+        const skip = (GRAPHICS_WIDTH / 2) + 1;
+        // const width = 5;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times(GRAPHICS_WIDTH - 2, (i): EmulatorCommand => {
+        const row_offset = 5;
+        const skip = 1;
+        // const width = 5;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times(GRAPHICS_WIDTH, (i): EmulatorCommand => {
+        const row_offset = 6;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i }; 
+    }),
+    ...times(GRAPHICS_WIDTH - 2, (i): EmulatorCommand => {
+        const row_offset = 7;
+        const skip = 1;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times(GRAPHICS_WIDTH - 4, (i): EmulatorCommand => {
+        const row_offset = 8;
+        const skip = 2;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times(GRAPHICS_WIDTH - 6, (i): EmulatorCommand => {
+        const row_offset = 9;
+        const skip = 3;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times(GRAPHICS_WIDTH - 8, (i): EmulatorCommand => {
+        const row_offset = 10;
+        const skip = 4;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times(GRAPHICS_WIDTH - 10, (i): EmulatorCommand => {
+        const row_offset = 11;
+        const skip = 5;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times(GRAPHICS_WIDTH - 12, (i): EmulatorCommand => {
+        const row_offset = 12;
+        const skip = 6;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
+    ...times(GRAPHICS_WIDTH - 14, (i): EmulatorCommand => {
+        const row_offset = 13;
+        const skip = 7;
+        return {command: "store", from: "ra", to: row_offset * GRAPHICS_WIDTH + i + skip }; 
+    }),
 ];
 
 const DEFAULT_STATE: IEmulatorState = {
@@ -346,7 +425,7 @@ const DEFAULT_STATE: IEmulatorState = {
 const emulatorStates: IEmulatorState[] = [
     DEFAULT_STATE
 ];
-const MAX_RUNS = 100;
+const MAX_RUNS = 200;
 for (let i = 0; i < MAX_RUNS; i++) {
     const last_state = emulatorStates[emulatorStates.length - 1];
 
