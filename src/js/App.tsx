@@ -83,7 +83,7 @@ class App extends React.Component<IAppProps, IAppState> {
     render() {
         return <main className="main">
             <aside className="view_chooser">
-                <ul>
+                <ul className="radio_list">
                     {
                         [
                             { value: "code", text: "Code view", compareValue: AppViewType.CodeView },
@@ -105,7 +105,7 @@ class App extends React.Component<IAppProps, IAppState> {
             {(this.state.currentView === AppViewType.ExecutionView)
                 ? this.renderExecutionView()
                 : this.renderCodeView()}
-            <aside className="memory">
+            <aside className="sidebar">
                 {/* TODO! */}
                 <table>
                     <caption>Memory</caption>
