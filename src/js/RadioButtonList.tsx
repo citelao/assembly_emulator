@@ -21,7 +21,9 @@ export default class RadioButtonList extends React.Component<IRadioButtonListPro
                             type="radio"
                             name={this.props.name}
                             value={r.value}
-                            checked={r.value === this.props.selectedValue}
+                            checked={(this.props.selectedValue === undefined)
+                                ? undefined
+                                : r.value === this.props.selectedValue}
                             onChange={this.handleViewChange} />
                         {r.text}
                     </label>
