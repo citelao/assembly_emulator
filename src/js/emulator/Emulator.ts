@@ -50,7 +50,13 @@ export default class Emulator {
             }
             case "load":
             {
-                throw new Error("load not implemented");
+                const partialState: Partial<IEmulatorState> = {};
+                partialState.pc = oldState.pc + 1;
+
+                // TODO: bounds checking.
+                partialState[command.to] = oldState.memory[command.from];
+
+                return Object.assign({}, oldState, partialState);
             }
             case "store":
             {

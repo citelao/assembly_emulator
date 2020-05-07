@@ -308,6 +308,7 @@ const emulatorCommands: EmulatorCommand[] = [
     { command: "set", register: "rb", value: 30},
     { command: "store", from: "rb", to: 1 },
     { command: "store", from: "ra", to: 0 },
+    { command: "load", from: 0, to: "rc" },
 ];
 
 const DEFAULT_STATE: IEmulatorState = {
