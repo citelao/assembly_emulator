@@ -204,6 +204,7 @@ class App extends React.Component<IAppProps, IAppState> {
                                 ? this.props.emulatorState[firstLineIndex + 1]
                                 : null;
     
+                            // TODO: this is *really* bad at actually visualizing code flow.
                             // TODO: handle if any previous lines come from elsewhere.
                             // TODO: handle if any next lines go elsewhere.
                             // TODO: handle first item in loop
@@ -270,6 +271,11 @@ const emulatorCommands: EmulatorCommand[] = [
     { command: "increment", register: "rc", by: 1 },
     { command: "jeq", to: 9, a: "rc", b: "ra" },
     { command: "jump", to: 3},
+    "nop",
+    "nop",
+    "nop",
+    "nop",
+    "nop",
     "nop",
 ];
 
