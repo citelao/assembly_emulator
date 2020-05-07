@@ -105,6 +105,24 @@ class App extends React.Component<IAppProps, IAppState> {
             {(this.state.currentView === AppViewType.ExecutionView)
                 ? this.renderExecutionView()
                 : this.renderCodeView()}
+            <aside>
+                {/* TODO! */}
+                <table>
+                    <caption>Memory</caption>
+                    <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.props.emulatorState[this.props.emulatorState.length - 1].memory.map((m, index) => <tr>
+                            <td>{index}</td>
+                            <td>{m}</td>
+                        </tr>)}
+                    </tbody>
+                </table>
+            </aside>
             <p>Ignore below</p>
             {this.renderColors()}
         </main>;
@@ -261,22 +279,35 @@ class App extends React.Component<IAppProps, IAppState> {
 // ];
 
 // Terminating loop
+// const emulatorCommands: EmulatorCommand[] = [
+//     { command: "set", register: "ra", value: 3},
+//     { command: "set", register: "rc", value: 0},
+//     "nop",
+//     "nop",
+//     "nop",
+//     "nop",
+//     { command: "increment", register: "rc", by: 1 },
+//     { command: "jeq", to: 9, a: "rc", b: "ra" },
+//     { command: "jump", to: 3},
+//     "nop",
+//     "nop",
+//     "nop",
+//     "nop",
+//     "nop",
+//     "nop",
+// ];
+
+// Assignment
 const emulatorCommands: EmulatorCommand[] = [
+    "nop",
+    "nop",
+    "nop",
+    "nop",
+    "nop",
     { command: "set", register: "ra", value: 3},
-    { command: "set", register: "rc", value: 0},
-    "nop",
-    "nop",
-    "nop",
-    "nop",
-    { command: "increment", register: "rc", by: 1 },
-    { command: "jeq", to: 9, a: "rc", b: "ra" },
-    { command: "jump", to: 3},
-    "nop",
-    "nop",
-    "nop",
-    "nop",
-    "nop",
-    "nop",
+    { command: "set", register: "rb", value: 30},
+    { command: "store", from: "rb", to: 1 },
+    { command: "store", from: "ra", to: 0 },
 ];
 
 const DEFAULT_STATE: IEmulatorState = {
@@ -284,6 +315,7 @@ const DEFAULT_STATE: IEmulatorState = {
     ra: 0,
     rb: 0,
     rc: 0,
+    memory: [0, 0, 0, 0, 0, 0]
 };
 
 const emulatorStates: IEmulatorState[] = [

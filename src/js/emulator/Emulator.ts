@@ -1,4 +1,4 @@
-import { EmulatorCommand } from "./EmulatorTypes";
+import { EmulatorCommand, Memory } from "./EmulatorTypes";
 import { IEmulatorState } from "./IEmulatorState";
 
 export default class Emulator {
@@ -46,6 +46,24 @@ export default class Emulator {
                 } else {
                     partialState.pc = oldState.pc + 1;
                 }
+                return Object.assign({}, oldState, partialState);
+            }
+            case "load":
+            {
+                throw new Error("load not implemented");
+            }
+            case "store":
+            {
+                const partialState: Partial<IEmulatorState> = {};
+                partialState.pc = oldState.pc + 1;
+
+                // Clone the memory. Note: this assumes that memory entries are
+                // primitives.
+                const newMemory: Memory = Object.assign([], oldState.memory);
+                newMemory[command.to] = oldState[command.from];
+
+                partialState.memory = newMemory;
+
                 return Object.assign({}, oldState, partialState);
             }
         }
