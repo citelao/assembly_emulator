@@ -4,6 +4,7 @@ import Color from "color";
 import { RegisterValue, REGISTER_MAX, EmulatorCommand, stringify } from "./emulator/EmulatorTypes";
 import { IEmulatorState, stringifyEmulatorState } from "./emulator/IEmulatorState";
 import Emulator from "./emulator/Emulator";
+import RadioButtonList from "./RadioButtonList";
 
 function times<T>(n: number, func: (index: number) => T): T[] {
     const ret: T[] = [];
@@ -83,24 +84,16 @@ class App extends React.Component<IAppProps, IAppState> {
     render() {
         return <main className="main">
             <aside className="view_chooser">
-                <ul className="radio_list">
-                    {
-                        [
-                            { value: "code", text: "Code view", compareValue: AppViewType.CodeView },
-                            { value: "execute", text: "Execution view", compareValue: AppViewType.ExecutionView },
-                        ].map((r) => <li>
-                            <label>
-                                <input
-                                    type="radio"
-                                    name="view"
-                                    value={r.value}
-                                    checked={r.compareValue === this.state.currentView}
-                                    onChange={this.handleViewChange} />
-                                {r.text}
-                            </label>
-                        </li>)
-                    }
-                </ul>
+                <RadioButtonList
+                    name="view"
+                    items={[
+                        { value: "code", text: "Code view" },
+                        { value: "execute", text: "Execution view" }
+                    ]}
+                    selectedValue={(this.state.currentView === AppViewType.CodeView)
+                        ? "code"
+                        : "execute" }
+                    onChanged={this.handleViewChange} />
             </aside>
             {(this.state.currentView === AppViewType.ExecutionView)
                 ? this.renderExecutionView()
@@ -128,10 +121,10 @@ class App extends React.Component<IAppProps, IAppState> {
         </main>;
     }
 
-    private handleViewChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(`Setting view to '${e.target.value}'`);
+    private handleViewChange = (value: string) => {
+        console.log(`Setting view to '${value}'`);
         this.setState({
-            currentView: (e.target.value == "code")
+            currentView: (value == "code")
                 ? AppViewType.CodeView
                 : AppViewType.ExecutionView
         });
