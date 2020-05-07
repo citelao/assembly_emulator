@@ -81,8 +81,8 @@ class App extends React.Component<IAppProps, IAppState> {
     }
 
     render() {
-        return <main>
-            <aside>
+        return <main className="main">
+            <aside className="view_chooser">
                 <ul>
                     {
                         [
@@ -105,7 +105,7 @@ class App extends React.Component<IAppProps, IAppState> {
             {(this.state.currentView === AppViewType.ExecutionView)
                 ? this.renderExecutionView()
                 : this.renderCodeView()}
-            <aside>
+            <aside className="memory">
                 {/* TODO! */}
                 <table>
                     <caption>Memory</caption>
@@ -138,7 +138,7 @@ class App extends React.Component<IAppProps, IAppState> {
     }
 
     private renderExecutionView(): JSX.Element {
-        return <table>
+        return <table className="code">
             <thead>
                 <tr>
                     <th>PC</th>
@@ -191,7 +191,7 @@ class App extends React.Component<IAppProps, IAppState> {
     }
 
     private renderCodeView(): JSX.Element {
-        return <table>
+        return <table className="code">
             <thead>
                 <tr>
                     <th>{""}</th>
