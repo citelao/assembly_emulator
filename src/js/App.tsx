@@ -57,6 +57,9 @@ function getProgramCounterStyle(current: RegisterValue, previous?: RegisterValue
     };
 };
 
+const GRAPHICS_HEIGHT = 4;
+const GRAPHICS_WIDTH = 4;
+
 interface IAppProps {
     code: EmulatorCommand[];
     emulatorState: IEmulatorState[];
@@ -99,13 +102,33 @@ class App extends React.Component<IAppProps, IAppState> {
                 ? this.renderExecutionView()
                 : this.renderCodeView()}
             <aside className="sidebar">
+                {/* TODO: make this work */}
                 <RadioButtonList
-                        name="numbers"
-                        items={[
-                            { value: "dec", text: "Decimal" },
-                            { value: "hex", text: "Hexidecimal" },
-                            { value: "binary", text: "Binary" }
-                        ]} />
+                    name="numbers"
+                    items={[
+                        { value: "dec", text: "Decimal" },
+                        { value: "hex", text: "Hexidecimal" },
+                        { value: "binary", text: "Binary" }
+                    ]} />
+                <table>
+                    <caption>Data</caption>
+                    <tbody>
+                        {times(GRAPHICS_HEIGHT, (i) => {
+                            return <tr>
+                                {times(GRAPHICS_WIDTH, (j) => {
+                                    const index = i * GRAPHICS_WIDTH + j;
+                                    const value = this.props.emulatorState[this.props.emulatorState.length - 1]
+                                        .memory[index];
+                                    
+                                    const color = (value > 0)
+                                        ? "#000"
+                                        : "#fff";
+                                    return <td style={{ backgroundColor: color }}>{value}</td>;
+                                })}
+                            </tr>;
+                        })}
+                    </tbody>
+                </table>
                 {/* TODO! */}
                 <table>
                     <caption>Memory</caption>
@@ -316,7 +339,8 @@ const DEFAULT_STATE: IEmulatorState = {
     ra: 0,
     rb: 0,
     rc: 0,
-    memory: [0, 0, 0, 0, 0, 0]
+    // TODO: use bit mapping, not byte addressing, but I'm lazy.
+    memory: Array.from({ length: GRAPHICS_HEIGHT * GRAPHICS_WIDTH }, () => 0)
 };
 
 const emulatorStates: IEmulatorState[] = [
