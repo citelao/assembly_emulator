@@ -264,7 +264,7 @@ const emulatorCommands: EmulatorCommand[] = [
     { command: "set", register: "ra", value: 0 },
     { command: "set", register: "rb", value: GRAPHICS_WIDTH },
     { command: "set", register: "rc", value: 1 },
-    { command: "store", from: "rc", to: 5    },
+    { command: "storeto", from: "rc", toPtr: "ra" },
 
 ];
 

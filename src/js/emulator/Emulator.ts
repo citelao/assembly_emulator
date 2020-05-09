@@ -72,6 +72,20 @@ export default class Emulator {
 
                 return Object.assign({}, oldState, partialState);
             }
+            case "storeto":
+            {
+                const partialState: Partial<IEmulatorState> = {};
+                partialState.pc = oldState.pc + 1;
+
+                // Clone the memory. Note: this assumes that memory entries are
+                // primitives.
+                const newMemory: Memory = Object.assign([], oldState.memory);
+                newMemory[oldState[command.toPtr]] = oldState[command.from];
+
+                partialState.memory = newMemory;
+
+                return Object.assign({}, oldState, partialState);
+            }
         }
     }
 }

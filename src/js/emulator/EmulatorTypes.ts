@@ -43,6 +43,11 @@ export type EmulatorCommand =
         command: "store"
         from: RegisterName,
         to: Address
+    } |
+    {
+        command: "storeto"
+        from: RegisterName,
+        toPtr: RegisterName
     };
 
 export function stringify(command: EmulatorCommand): string {
@@ -65,5 +70,7 @@ export function stringify(command: EmulatorCommand): string {
             return `load from ${command.from} to ${command.to}`;
         case "store":
             return `store from ${command.from} to ${command.to}`;
+        case "storeto":
+            return `store from ${command.from} to ${command.toPtr}`;
     }
 }
