@@ -265,7 +265,9 @@ const emulatorCommands: EmulatorCommand[] = [
     { command: "set", register: "rb", value: GRAPHICS_WIDTH },
     { command: "set", register: "rc", value: 1 },
     { command: "storeto", from: "rc", toPtr: "ra" },
-
+    { command: "increment", register: "ra", by: 1 },
+    { command: "jeq", to: 7, a: "ra", b: "rb"},
+    { command: "jump", to: 2 },
 ];
 
 const DEFAULT_STATE: IEmulatorState = {
