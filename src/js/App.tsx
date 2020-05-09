@@ -5,14 +5,8 @@ import { RegisterValue, REGISTER_MAX, EmulatorCommand, stringify } from "./emula
 import { IEmulatorState, stringifyEmulatorState } from "./emulator/IEmulatorState";
 import Emulator from "./emulator/Emulator";
 import RadioButtonList from "./RadioButtonList";
-
-function times<T>(n: number, func: (index: number) => T): T[] {
-    const ret: T[] = [];
-    for (let i = 0; i < n; i++) {
-        ret.push(func(i));
-    }
-    return ret;
-}
+import { times } from "./functional";
+import WordBinaryDisplay from "./WordBinaryDisplay";
 
 // This is a terrible hash function. Love, Ben.
 function generatorRegisterColor(registerValue: RegisterValue): Color {
@@ -110,25 +104,12 @@ class App extends React.Component<IAppProps, IAppState> {
                         { value: "hex", text: "Hexidecimal" },
                         { value: "binary", text: "Binary" }
                     ]} />
-                <table>
-                    <caption>Data</caption>
-                    <tbody>
-                        {times(GRAPHICS_HEIGHT, (i) => {
-                            return <tr>
-                                {times(GRAPHICS_WIDTH, (j) => {
-                                    const index = i * GRAPHICS_WIDTH + j;
-                                    const value = this.props.emulatorState[this.props.emulatorState.length - 1]
-                                        .memory[index];
-                                    
-                                    const color = (value > 0)
-                                        ? "#000"
-                                        : "#fff";
-                                    return <td style={{ backgroundColor: color }}>{value}</td>;
-                                })}
-                            </tr>;
-                        })}
-                    </tbody>
-                </table>
+                <WordBinaryDisplay
+                    rows={GRAPHICS_HEIGHT}
+                    columns={GRAPHICS_WIDTH}
+                    data={this.props
+                        .emulatorState[this.props.emulatorState.length - 1]
+                        .memory} />
                 {/* TODO! */}
                 <table>
                     <caption>Memory</caption>
